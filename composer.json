@@ -1,0 +1,19 @@
+{
+    "name": "kxbrand/phplib",
+    "description": "kxbrand lib for php",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "kxbrand",
+            "email": "kxbrand@qq.com"
+        }
+    ],
+    "require": {
+    	"php": ">=7.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "kxbrand\\phplib\\": "src"
+        }
+    }  
+}
