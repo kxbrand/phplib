@@ -64,4 +64,28 @@ class Tools
         return $content;
     }
     
+    /**
+     * 解析XML内容到数组
+     * @param string $xml
+     * @return array
+     */
+    public static function xml2arr($xml)
+    {
+        $entity = libxml_disable_entity_loader(true);
+        $data = (array)simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
+        libxml_disable_entity_loader($entity);
+        return json_decode(json_encode($data), true);
+    }
+
+    /**
+     * 解析XML文本内容
+     * @param string $xml
+     * @return boolean|mixed
+     */
+    public static function xml3arr($xml)
+    {
+        $state = xml_parse($parser = xml_parser_create(), $xml, true);
+        return xml_parser_free($parser) && $state ? self::xml2arr($xml) : false;
+    }
+    
 }
