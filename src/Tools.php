@@ -63,13 +63,24 @@ class Tools
         }
         return $content;
     }
+
+    /**
+     * 解析XML文本内容
+     * @param string $xml
+     * @return boolean|mixed
+     */
+    public static function xml2arr($xml)
+    {
+        $state = xml_parse($parser = xml_parser_create(), $xml, true);
+        return xml_parser_free($parser) && $state ? self::_xml2arr($xml) : false;
+    }
     
     /**
      * 解析XML内容到数组
      * @param string $xml
      * @return array
      */
-    public static function xml2arr($xml)
+    private static function _xml2arr($xml)
     {
         $entity = libxml_disable_entity_loader(true);
         $data = (array)simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -78,14 +89,32 @@ class Tools
     }
 
     /**
-     * 解析XML文本内容
-     * @param string $xml
-     * @return boolean|mixed
+     * 数组转xml内容
+     * @param array $data
+     * @return null|string
      */
-    public static function xml3arr($xml)
+    public static function arr2json($data)
     {
-        $state = xml_parse($parser = xml_parser_create(), $xml, true);
-        return xml_parser_free($parser) && $state ? self::xml2arr($xml) : false;
+        $json = json_encode($data, JSON_UNESCAPED_UNICODE);
+        return $json === '[]' ? '{}' : $json;
+    }
+
+    /**
+     * 解析JSON内容到数组
+     * @param string $json
+     * @return array
+     * @throws InvalidResponseException
+     */
+    public static function json2arr($json)
+    {
+        $result = json_decode($json, true);
+        if (empty($result)) {
+            return false;
+        }
+        if (!empty($result['errcode'])) {
+            return false;
+        }
+        return $result;
     }
     
 }
